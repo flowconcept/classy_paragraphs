@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @file
+ * Main module file for Classy Paragraphs.
+ */
+
+// Paragraphs entity bundle.
+define('CLASSY_PARAGRAPHS_ENTITY_TYPE', 'paragraphs_item');
+// Full content view mode machine name.
+define('CLASSY_PARAGRAPHS_VIEW_MODE', 'full');
+// Field type classy paragraphs list.
+define('CLASSY_PARAGRAPHS_FIELD_TYPE_LIST', 'classy_paragraphs');
+
+/**
+ * Get list of options from other modules.
+ *
+ * @param $field
+ * @param $instance
+ * @return array
+ */
+function classy_paragraphs_get_options($field, $instance) {
+  $options = array();
+  $options = module_invoke_all('classy_paragraphs_list_options', $options, $field, $instance);
+  drupal_alter('classy_paragraphs_list_options', $options);
+
+  return $options;
+}
+
+/**
+ * Implements hook_field_widget_info_alter().
+ *
+ * The 'classy_paragraphs' field type does not implement widgets of its own, but reuses the
+ * widget defined in options.module.
+ *
+ */
+function classy_paragraphs_field_widget_info_alter(&$info) {
+  $info['options_select']['field_types'][] = 'classy_paragraphs';
+  $info['options_buttons']['field_types'][] = 'classy_paragraphs';
+}
