@@ -30,8 +30,7 @@ use Drupal\Core\Field\FieldStorageDefinitionInterface;
 function hook_classy_paragraphs_options_alter(&$options, $definition, $entity) {
   // Check if this is the field we want to change.
   if ($definition->getName() == 'my_classy_paragraphs_field') {
-    // Change the label of the empty option.
-    $values['_none'] = t('== Empty ==');
+    // Do something
   }
 }
 

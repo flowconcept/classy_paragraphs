@@ -40,30 +40,6 @@ function classy_paragraphs_allowed_values(FieldStorageDefinitionInterface $defin
   return $allowed_values[$cache_id];
 }
 
-# function classy_paragraphs_classy_paragraphs_options_alter(&$values, $definition, $entity) {}
-
-/**
- *
- * @param $definition
- * @param $entity
- * @return array
- */
-/*
-function classy_paragraphs_classy_paragraphs_options($definition, $entity) {
-  $options = array(
-    t('First group') => array(
-      'zero' => t('Zero'),
-    ),
-    t('Second group') => array(
-      'one' => t('One'),
-      'two' => t('Two'),
-    ),
-    'three' => t('Three'),
-  );
-  return $options;
-}
-*/
-
 /**
  * Implements hook_field_widget_info_alter().
  *
