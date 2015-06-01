@@ -13,22 +13,56 @@ define('CLASSY_PARAGRAPHS_VIEW_MODE', 'full');
 define('CLASSY_PARAGRAPHS_FIELD_TYPE_LIST', 'classy_paragraphs');
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 
 /**
  * Get list of options from other modules.
  *
- * @param $field
- * @param $instance
+ */
+function classy_paragraphs_allowed_values(FieldStorageDefinitionInterface $definition, FieldableEntityInterface $entity = NULL) {
+  $allowed_values = &drupal_static(__FUNCTION__, array());
+
+  $cache_keys = array($definition->getTargetEntityTypeId(), $definition->getName());
+  if ($entity) {
+    $cache_keys[] = 'entity';
+  }
+  $cache_id = implode(':', $cache_keys);
+
+  if (!isset($allowed_values[$cache_id])) {
+    $values = Drupal::moduleHandler()->invokeAll('classy_paragraphs_options', array($definition, $entity));
+    Drupal::moduleHandler()->alter('classy_paragraphs_options', $values, $definition, $entity);
+    $allowed_values[$cache_id] = $values;
+    return $values;
+  }
+
+  return $allowed_values[$cache_id];
+}
+
+# function classy_paragraphs_classy_paragraphs_options_alter(&$values, $definition, $entity) {}
+
+/**
+ *
+ * @param $definition
+ * @param $entity
  * @return array
  */
-function classy_paragraphs_get_options($field, $instance) {
-  $options = array();
-  $options = module_invoke_all('classy_paragraphs_list_options', $options, $field, $instance);
-  drupal_alter('classy_paragraphs_list_options', $options);
-
+/*
+function classy_paragraphs_classy_paragraphs_options($definition, $entity) {
+  $options = array(
+    t('First group') => array(
+      'zero' => t('Zero'),
+    ),
+    t('Second group') => array(
+      'one' => t('One'),
+      'two' => t('Two'),
+    ),
+    'three' => t('Three'),
+  );
   return $options;
 }
+*/
 
 /**
  * Implements hook_field_widget_info_alter().

@@ -16,7 +16,7 @@ use Drupal\options\Plugin\Field\FieldType\ListItemBase;
  *
  * @FieldType (
  *   id = "classy_paragraphs",
- *   label = @Translation("Classy paragraph list"),
+ *   label = @Translation("Classy paragraphs"),
  *   category = @Translation("Paragraphs"),
  *   description = @Translation("This field stores a selected class."),
  *   default_widget = "options_select",
@@ -72,49 +72,9 @@ class ClassyParagraphsItem extends ListItemBase {
   /**
    * {@inheritdoc}
    */
-  public function getPossibleValues(AccountInterface $account = NULL) {
-    return array('zero', 'one', 'two', 'three');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getPossibleOptions(AccountInterface $account = NULL) {
-    return array(
-      t('First group') => array(
-        'zero' => t('Zero'),
-      ),
-      t('Second group') => array(
-        'one' => t('One'),
-        'two' => t('Two'),
-      ),
-      'three' => t('Three'),
-    );
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getSettableValues(AccountInterface $account = NULL) {
-    if ($account && $account->hasPermission('set classy_paragraphs data')) {
-      return array('zero', 'one', 'two', 'three');
-    }
-    return array('zero', 'three');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getSettableOptions(AccountInterface $account = NULL) {
-    if ($account && $account->hasPermission('set classy_paragraphs data')) {
-      return $this->getPossibleOptions();
-    }
-    return array(
-      t('First group') => array(
-        'zero' => t('Zero'),
-      ),
-      'Three' => t('Three'),
-    );
+    $allowed_options = classy_paragraphs_allowed_values($this->getFieldDefinition()->getFieldStorageDefinition(), $this->getEntity());
+    return $allowed_options;
   }
 }
 ?>
