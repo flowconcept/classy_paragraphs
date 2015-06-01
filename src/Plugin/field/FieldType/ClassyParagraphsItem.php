@@ -73,7 +73,7 @@ class ClassyParagraphsItem extends ListItemBase {
    * {@inheritdoc}
    */
   public function getPossibleValues(AccountInterface $account = NULL) {
-    return array(0, 1, 2, 3);
+    return array('zero', 'one', 'two', 'three');
   }
 
   /**
@@ -82,13 +82,13 @@ class ClassyParagraphsItem extends ListItemBase {
   public function getPossibleOptions(AccountInterface $account = NULL) {
     return array(
       t('First group') => array(
-        0 => t('Zero'),
+        'zero' => t('Zero'),
       ),
       t('Second group') => array(
-        1 => t('One'),
-        2 => t('Two'),
+        'one' => t('One'),
+        'two' => t('Two'),
       ),
-      3 => t('Three'),
+      'three' => t('Three'),
     );
   }
 
@@ -96,24 +96,24 @@ class ClassyParagraphsItem extends ListItemBase {
    * {@inheritdoc}
    */
   public function getSettableValues(AccountInterface $account = NULL) {
-    if ($account && $account->hasPermission('set mymodule data')) {
-      return array(0, 1, 2, 3);
+    if ($account && $account->hasPermission('set classy_paragraphs data')) {
+      return array('zero', 'one', 'two', 'three');
     }
-    return array(0, 3);
+    return array('zero', 'three');
   }
 
   /**
    * {@inheritdoc}
    */
   public function getSettableOptions(AccountInterface $account = NULL) {
-    if ($account && $account->hasPermission('set mymodule data')) {
+    if ($account && $account->hasPermission('set classy_paragraphs data')) {
       return $this->getPossibleOptions();
     }
     return array(
       t('First group') => array(
-        0 => t('Zero'),
+        'zero' => t('Zero'),
       ),
-      3 => t('Three'),
+      'Three' => t('Three'),
     );
   }
 }

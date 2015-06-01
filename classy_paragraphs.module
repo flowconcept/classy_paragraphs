@@ -12,6 +12,9 @@ define('CLASSY_PARAGRAPHS_VIEW_MODE', 'full');
 // Field type classy paragraphs list.
 define('CLASSY_PARAGRAPHS_FIELD_TYPE_LIST', 'classy_paragraphs');
 
+use Drupal\Component\Utility\Html;
+use Drupal\paragraphs\Entity\Paragraph;
+
 /**
  * Get list of options from other modules.
  *
@@ -37,4 +40,49 @@ function classy_paragraphs_get_options($field, $instance) {
 function classy_paragraphs_field_widget_info_alter(&$info) {
   $info['options_select']['field_types'][] = 'classy_paragraphs';
   $info['options_buttons']['field_types'][] = 'classy_paragraphs';
+}
+
+/**
+ * Prepares variables for paragraph templates.
+ *
+ * Default template: paragraph.html.twig.
+ *
+ * Most themes use their own copy of paragraph.html.twig. The default is located
+ * inside "templates/paragraph.html.twig". Look in there for the
+ * full list of variables.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An array of elements to display in view mode.
+ *   - paragraph: The paragraph object.
+ *   - view_mode: View mode; e.g., 'full', 'teaser'...
+ */
+function classy_paragraphs_preprocess_paragraph(&$variables) {
+  $classes = classy_paragraphs_get_classes($variables['paragraph']);
+  foreach ($classes as $class) {
+    $variables['attributes']['class'][] = Html::cleanCssIdentifier($class);
+  }
+}
+
+/**
+ * Get class names from paragraph item.
+ *
+ * @param Paragraph $paragraph
+ * @return array
+ */
+function classy_paragraphs_get_classes(Paragraph $paragraph) {
+  $classes = array();
+  $field_definitions = $paragraph->getFieldDefinitions();
+  $instances = field_entity_bundle_field_info($paragraph->getEntityType(), $paragraph->getType(), $field_definitions);
+
+  foreach ($instances as $instance) {
+    if ($instance->getType() == 'classy_paragraphs') {
+      $field_name = $instance->getName();
+      $items = $paragraph->get($field_name)->getValue();
+      foreach ($items as $item) {
+        $classes[] = $item['value'];
+      }
+    }
+  }
+  return $classes;
 }
