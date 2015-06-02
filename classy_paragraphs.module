@@ -35,7 +35,6 @@ function classy_paragraphs_allowed_values(FieldStorageDefinitionInterface $defin
     $values = Drupal::moduleHandler()->invokeAll('classy_paragraphs_options', array($definition, $entity));
 
     // Let the themes play too, because classes for paragraphs is quite a themey thing.
-
     $theme_handler = Drupal::service('theme_handler');
     /* @var $theme_handler Drupal\Core\Extension\ThemeHandlerInterface */
     $default_theme = $theme_handler->getDefault();
@@ -43,8 +42,9 @@ function classy_paragraphs_allowed_values(FieldStorageDefinitionInterface $defin
     $themes[] = $default_theme;
     foreach ($themes as $theme_name) {
       $function = $theme_name . '_classy_paragraphs_options';
+      $theme_handler->getTheme($theme_name)->load();
       if (function_exists($function)) {
-        $function($definition, $entity);
+        $values = $function($definition, $entity);
       }
     }
 
