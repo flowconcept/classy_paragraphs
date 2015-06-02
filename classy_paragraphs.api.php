@@ -11,8 +11,6 @@ use Drupal\Core\Field\FieldStorageDefinitionInterface;
 /**
  * Alters the list of options to be displayed for a field.
  *
- * This hook can notably be used to change the label of the empty option.
- *
  * @param array $options
  *   The array of options for the field, as returned by
  *   \Drupal\Core\TypedData\OptionsProviderInterface::getSettableOptions(). An
@@ -36,7 +34,8 @@ function hook_classy_paragraphs_options_alter(&$options, $definition, $entity) {
 
 /**
  * Provide the allowed values for a 'classy_paragraphs' field.
- *
+ * This hook can be used by themes.
+ * @see hook_views_pre_render()
  *
  * @param \Drupal\Core\Field\FieldStorageDefinitionInterface $definition
  *   The field storage definition.

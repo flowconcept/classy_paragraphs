@@ -31,7 +31,21 @@ function classy_paragraphs_allowed_values(FieldStorageDefinitionInterface $defin
   $cache_id = implode(':', $cache_keys);
 
   if (!isset($allowed_values[$cache_id])) {
+    // Invoke hook_classy_paragraphs_options
     $values = Drupal::moduleHandler()->invokeAll('classy_paragraphs_options', array($definition, $entity));
+
+    // Let the themes play too, because classes for paragraphs is quite a themey thing.
+    $active_theme = \Drupal::theme()->getActiveTheme();
+    $themes = array_keys($active_theme->getBaseThemes());
+    $themes[] = $active_theme->getName();
+    foreach ($themes as $theme_name) {
+      $function = $theme_name . '_classy_paragraphs_options';
+      if (function_exists($function)) {
+        $function($definition, $entity);
+      }
+    }
+
+    //
     Drupal::moduleHandler()->alter('classy_paragraphs_options', $values, $definition, $entity);
     $allowed_values[$cache_id] = $values;
     return $values;
