@@ -49,11 +49,36 @@ function classy_paragraphs_allowed_values(FieldStorageDefinitionInterface $defin
     }
 
     Drupal::moduleHandler()->alter('classy_paragraphs_options', $values, $definition, $entity);
+    classy_paragraphs_sort_options($values);
     $allowed_values[$cache_id] = $values;
     return $values;
   }
 
   return $allowed_values[$cache_id];
+}
+
+/**
+ * Recursively sort option values, including optgroup labels.
+ */
+function classy_paragraphs_sort_options(&$options) {
+  uksort($options, function($a, $b) use ($options) {
+    // If the option value is an array (i.e., it is an optgroup), sort by
+    // the key (the group label). Otherwise sort by option value.
+    if (!is_array($options[$a])) {
+      $a = $options[$a];
+    }
+    if (!is_array($options[$b])) {
+      $b = $options[$b];
+    }
+    return strcasecmp($a, $b);
+  });
+
+  // Sort optgroups.
+  foreach ($options as &$value) {
+    if (is_array($value)) {
+      classy_paragraphs_sort_options($value);
+    }
+  }
 }
 
 /**
