@@ -26,7 +26,7 @@ function classy_paragraphs_allowed_values(FieldStorageDefinitionInterface $defin
 
   $cache_keys = array($definition->getTargetEntityTypeId(), $definition->getName());
   if ($entity) {
-    $cache_keys[] = 'entity';
+    $cache_keys = array_merge($cache_keys, array($entity->bundle(), $entity->language()->getId()));
   }
   $cache_id = implode(':', $cache_keys);
 
