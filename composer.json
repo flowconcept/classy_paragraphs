@@ -1,9 +1,9 @@
 {
-    "name": "ol0lll/classy_paragraphs",
+    "name": "flowconcept/classy_paragraphs",
     "version": "master",
     "type": "drupal-module",
     "soure": {
-        "url": "git@github:ol0lll/classy_paragraphs.git",
+        "url": "git@github:flowconcept/classy_paragraphs.git",
         "type": "git"
     }
 }
